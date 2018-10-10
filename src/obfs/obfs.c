@@ -51,11 +51,11 @@ obfs_class *new_obfs_class(const char *plugin_name) {
     init_shift128plus();
     if (strcmp(plugin_name, "http_simple") == 0) {
         obfs_class *plugin = (obfs_class *) malloc(sizeof(obfs_class));
-        plugin->init_data = init_data;
+        plugin->init_data = http_simple_init_data;
         plugin->new_obfs = http_simple_new_obfs;
         plugin->get_overhead = get_overhead;
         plugin->get_server_info = get_server_info;
-        plugin->set_server_info = set_server_info;
+        plugin->set_server_info = http_simple_set_server_info;
         plugin->dispose = http_simple_dispose;
 
         plugin->client_encode = http_simple_client_encode;
@@ -64,11 +64,11 @@ obfs_class *new_obfs_class(const char *plugin_name) {
         return plugin;
     } else if (strcmp(plugin_name, "http_post") == 0) {
         obfs_class *plugin = (obfs_class *) malloc(sizeof(obfs_class));
-        plugin->init_data = init_data;
+        plugin->init_data = http_simple_init_data;
         plugin->new_obfs = http_simple_new_obfs;
         plugin->get_overhead = get_overhead;
         plugin->get_server_info = get_server_info;
-        plugin->set_server_info = set_server_info;
+        plugin->set_server_info = http_simple_set_server_info;
         plugin->dispose = http_simple_dispose;
 
         plugin->client_encode = http_post_client_encode;

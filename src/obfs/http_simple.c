@@ -29,6 +29,103 @@ typedef struct http_simple_local_data {
     char *encode_buffer;
 }http_simple_local_data;
 
+typedef struct http_simple_global_data {
+    int count;
+    char *default_host;
+    char* payload[16];
+} http_simple_global_data;
+
+void* http_simple_init_data() {
+    int len = sizeof(http_simple_global_data);
+    http_simple_global_data *global = (http_simple_global_data *)malloc(len);
+    memset(global, 0, sizeof(len));
+    return global;
+}
+
+void http_simple_set_server_info(obfs *self, server_info *server) {
+    http_simple_global_data *global = (http_simple_global_data *)server->g_data;
+    if (global->default_host == NULL) {
+        if (server->port == 80)
+            asprintf(&global->default_host, "%s", server->host);
+        else
+            asprintf(&global->default_host, "%s:%u", server->host, server->port);
+
+        // trans
+        char *buffer = (char *)malloc(strlen(server->param));
+        char *src, *dst;
+        src = server->param;
+        dst = buffer;
+        for (src = server->param, dst = buffer; *src; src++, dst++) {
+            if (*src == '\\') {
+                switch(*(src + 1)){
+                case 'r':
+                    *dst = '\r';
+                    break;
+                case 'n':
+                    *dst = '\n';
+                    break;
+                case 't':
+                    *dst = '\t';
+                    break;
+                default:
+                    *dst = *(dst + 1);
+                }
+                src++;
+            } else {
+                *dst = *src;
+            }
+        }
+
+        // parse
+        int count;
+        char *str = NULL, *token = NULL, *saveptr = NULL;
+        for (count = 0, str = buffer; ; count++, str = NULL) {
+            token = strtok_r(str, ",", &saveptr);
+            if (token == NULL)
+                break;
+            
+            char *payload = (char *)malloc(strlen(token) + 64);
+            payload[0] = 0;
+
+            int i;
+            char *str, *saveptr;
+            for (i = 0, str = token; ; i++, str = NULL) {
+                token = strtok_r(str, "#", &saveptr);
+                if (token == NULL)
+                    break;
+
+                if (i == 0) {
+                    char *p = strchr(token, ':');
+                    if (p && atoi(p + 1) == 80)
+                        *p = 0;
+                    strcat(payload, "Host: ");
+                    strcat(payload, token);
+                    strcat(payload, "\r\n");
+                    continue;
+                }
+
+                char *str, *saveptr;
+                for (str = token; ; str = NULL) {
+                    token = strtok_r(str, "\r\n", &saveptr);
+                    if (token == NULL)
+                        break;
+                    
+                    strcat(payload, token);
+                    strcat(payload, "\r\n");
+                }
+            }
+            
+            global->payload[count] = strdup(payload);
+            free(payload);
+        }
+        global->count = count;
+
+        free(buffer);
+    }
+
+    memmove(&self->server, server, sizeof(server_info));
+}
+
 void http_simple_local_data_init(http_simple_local_data* local) {
     local->has_sent_header = 0;
     local->has_recv_header = 0;
@@ -80,72 +177,24 @@ int http_simple_client_encode(obfs *self, char **pencryptdata, int datalength, s
     if (local->has_sent_header) {
         return datalength;
     }
-    char hosts[1024];
-    char * phost[128];
-    int host_num = 0;
-    int pos;
-    char hostport[128];
+
     int head_size = self->server.head_len + (int)(xorshift128plus() & 0x3F);
     int outlength;
     char * out_buffer = (char*)malloc((size_t)(datalength + 2048));
-    char * body_buffer = NULL;
     if (head_size > datalength)
         head_size = datalength;
-    http_simple_encode_head(local, encryptdata, head_size);
-    if (self->server.param && strlen(self->server.param) == 0)
-        self->server.param = NULL;
-    strncpy(hosts, self->server.param ? self->server.param : self->server.host, sizeof hosts);
-    phost[host_num++] = hosts;
-    for (pos = 0; hosts[pos]; ++pos) {
-        if (hosts[pos] == ',') {
-            phost[host_num++] = &hosts[pos + 1];
-            hosts[pos] = 0;
-        } else if (hosts[pos] == '#') {
-            char * body_pointer = &hosts[pos + 1];
-            char * p;
-            int trans_char = 0;
-            p = body_buffer = (char*)malloc(2048);
-            for ( ; *body_pointer; ++body_pointer) {
-                if (trans_char) {
-                    if (*body_pointer == '\\' ) {
-                        *p = '\\';
-                    } else if (*body_pointer == 'n' ) {
-                        *p = '\r';
-                        *++p = '\n';
-                    } else {
-                        *p = '\\';
-                        *++p = *body_pointer;
-                    }
-                    trans_char = 0;
-                } else {
-                    if (*body_pointer == '\\') {
-                        trans_char = 1;
-                        continue;
-                    } else if (*body_pointer == '\n') {
-                        *p++ = '\r';
-                    }
-                    *p = *body_pointer;
-                }
-                ++p;
-            }
-            *p = 0;
-            hosts[pos] = 0;
-            break;
-        }
-    }
-    host_num = (int)(xorshift128plus() % (uint64_t)host_num);
-    if (self->server.port == 80)
-        sprintf(hostport, "%s", phost[host_num]);
-    else
-        sprintf(hostport, "%s:%d", phost[host_num], self->server.port);
-    if (body_buffer) {
+    http_simple_encode_head(local, encryptdata, head_size);;
+
+    http_simple_global_data *global = (http_simple_global_data *)self->server.g_data;
+    if (global->count) {
+        int idx = (int)(xorshift128plus() % (uint64_t)global->count);
+
         sprintf(out_buffer,
             "GET /%s HTTP/1.1\r\n"
-            "Host: %s\r\n"
-            "%s\r\n\r\n",
+            "%s"
+            "\r\n",
             local->encode_buffer,
-            hostport,
-            body_buffer);
+            global->payload[idx]);
     } else {
         sprintf(out_buffer,
             "GET /%s HTTP/1.1\r\n"
@@ -158,9 +207,8 @@ int http_simple_client_encode(obfs *self, char **pencryptdata, int datalength, s
             "Connection: keep-alive\r\n"
             "\r\n",
             local->encode_buffer,
-            hostport,
-            g_useragent[g_useragent_index]
-            );
+            global->default_host,
+            g_useragent[g_useragent_index]);
     }
     //LOGI("http header: %s", out_buffer);
     outlength = (int)strlen(out_buffer);
@@ -173,8 +221,6 @@ int http_simple_client_encode(obfs *self, char **pencryptdata, int datalength, s
     }
     memmove(encryptdata, out_buffer, outlength);
     free(out_buffer);
-    if (body_buffer != NULL)
-        free(body_buffer);
     if (local->encode_buffer != NULL) {
         free(local->encode_buffer);
         local->encode_buffer = NULL;
@@ -222,91 +268,38 @@ int http_post_client_encode(obfs *self, char **pencryptdata, int datalength, siz
     if (local->has_sent_header) {
         return datalength;
     }
-    char hosts[1024];
-    char * phost[128];
-    int host_num = 0;
-    int pos;
-    char hostport[128];
+
     int head_size = self->server.head_len + (int)(xorshift128plus() & 0x3F);
     int outlength;
     char * out_buffer = (char*)malloc((size_t)(datalength + 4096));
-    char * body_buffer = NULL;
     if (head_size > datalength)
         head_size = datalength;
     http_simple_encode_head(local, encryptdata, head_size);
-    if (self->server.param && strlen(self->server.param) == 0)
-        self->server.param = NULL;
-    strncpy(hosts, self->server.param ? self->server.param : self->server.host, sizeof hosts);
-    phost[host_num++] = hosts;
-    for (pos = 0; hosts[pos]; ++pos) {
-        if (hosts[pos] == ',') {
-            phost[host_num++] = &hosts[pos + 1];
-            hosts[pos] = 0;
-        } else if (hosts[pos] == '#') {
-            char * body_pointer = &hosts[pos + 1];
-            char * p;
-            int trans_char = 0;
-            p = body_buffer = (char*)malloc(2048);
-            for ( ; *body_pointer; ++body_pointer) {
-                if (trans_char) {
-                    if (*body_pointer == '\\' ) {
-                        *p = '\\';
-                    } else if (*body_pointer == 'n' ) {
-                        *p = '\r';
-                        *++p = '\n';
-                    } else {
-                        *p = '\\';
-                        *++p = *body_pointer;
-                    }
-                    trans_char = 0;
-                } else {
-                    if (*body_pointer == '\\') {
-                        trans_char = 1;
-                        continue;
-                    } else if (*body_pointer == '\n') {
-                        *p++ = '\r';
-                    }
-                    *p = *body_pointer;
-                }
-                ++p;
-            }
-            *p = 0;
-            hosts[pos] = 0;
-            break;
-        }
-    }
-    host_num = (int)(xorshift128plus() % (uint64_t)host_num);
-    if (self->server.port == 80)
-        snprintf(hostport, sizeof(hostport), "%s", phost[host_num]);
-    else
-        snprintf(hostport, sizeof(hostport), "%s:%d", phost[host_num], self->server.port);
-    if (body_buffer) {
-        snprintf(out_buffer, 2048,
+
+    http_simple_global_data *global = (http_simple_global_data *)self->server.g_data;
+    if (global->count) {
+        int idx = (int)(xorshift128plus() % (uint64_t)global->count);
+
+        sprintf(out_buffer,
             "POST /%s HTTP/1.1\r\n"
-            "Host: %s\r\n"
-            "%s\r\n\r\n",
+            "%s"
+            "\r\n",
             local->encode_buffer,
-            hostport,
-            body_buffer);
+            global->payload[idx]);
     } else {
-        char result[33] = {0};
-        boundary(result);
-        snprintf(out_buffer, 2048,
+        sprintf(out_buffer,
             "POST /%s HTTP/1.1\r\n"
             "Host: %s\r\n"
             "User-Agent: %s\r\n"
             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
             "Accept-Language: en-US,en;q=0.8\r\n"
             "Accept-Encoding: gzip, deflate\r\n"
-            "Content-Type: multipart/form-data; boundary=%s\r\n"
             "DNT: 1\r\n"
             "Connection: keep-alive\r\n"
             "\r\n",
             local->encode_buffer,
-            hostport,
-            g_useragent[g_useragent_index],
-            result
-            );
+            global->default_host,
+            g_useragent[g_useragent_index]);
     }
     //LOGI("http header: %s", out_buffer);
     outlength = (int)strlen(out_buffer);
@@ -319,8 +312,6 @@ int http_post_client_encode(obfs *self, char **pencryptdata, int datalength, siz
     }
     memmove(encryptdata, out_buffer, outlength);
     free(out_buffer);
-    if (body_buffer != NULL)
-        free(body_buffer);
     if (local->encode_buffer != NULL) {
         free(local->encode_buffer);
         local->encode_buffer = NULL;
