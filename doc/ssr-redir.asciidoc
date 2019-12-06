@@ -1,13 +1,13 @@
-ss-redir(1)
+ssr-redir(1)
 ===========
 
 NAME
 ----
-ss-redir - shadowsocks client as transparent proxy, libev port
+ssr-redir - shadowsocks client as transparent proxy, libev port
 
 SYNOPSIS
 --------
-*ss-redir*
+*ssr-redir*
  [-AuUv6] [-h|--help]
  [-s <server_host>] [-p <server_port>] [-l <local_port>]
  [-k <password>] [-m <encrypt_method>] [-f <pid_file>]
@@ -22,7 +22,7 @@ It is a port of the original shadowsocks created by clowwindy.
 achieve both high performance and low resource consumption.
 
 *Shadowsocks-libev* consists of five components.
-`ss-redir`(1) works as a transparent proxy on local machines to proxy TCP
+`ssr-redir`(1) works as a transparent proxy on local machines to proxy TCP
 traffic and requires netfilter's NAT module.
 For more information, check out `shadowsocks-libev`(8) and the following
 'EXAMPLE' section.
@@ -109,7 +109,7 @@ Print help message.
 
 EXAMPLE
 -------
-ss-redir requires netfilter's NAT function. Here is an example:
+ssr-redir requires netfilter's NAT function. Here is an example:
 
 ....
 # Create new chain
@@ -144,15 +144,15 @@ root@Wrt:~# iptables -t nat -A PREROUTING -p tcp -j SHADOWSOCKS
 root@Wrt:~# iptables -t mangle -A PREROUTING -j SHADOWSOCKS
 
 # Start the shadowsocks-redir
-root@Wrt:~# ss-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid
+root@Wrt:~# ssr-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid
 ....
 
 SEE ALSO
 --------
-`ss-local`(1),
-`ss-server`(1),
-`ss-tunnel`(1),
-`ss-manager`(1),
+`ssr-local`(1),
+`ssr-server`(1),
+`ssr-tunnel`(1),
+`ssr-manager`(1),
 `shadowsocks-libev`(8),
 `iptables`(8),
 /etc/shadowsocks-libev/config.json

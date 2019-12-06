@@ -735,7 +735,7 @@ remote_recv_cb(EV_P_ ev_io *w, int revents)
     int len = parse_udprealy_header(buf->array, buf->len, NULL, NULL, &dst_addr);
 
     if (dst_addr.ss_family != AF_INET && dst_addr.ss_family != AF_INET6) {
-        LOGI("[udp] ss-redir does not support domain name");
+        LOGI("[udp] ssr-redir does not support domain name");
         goto CLEAN_UP;
     }
 

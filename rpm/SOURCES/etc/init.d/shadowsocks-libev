@@ -7,7 +7,7 @@
 # Run level information:
 # chkconfig: 2345 99 99
 # Description: lightweight secured socks5 proxy
-# processname: ss-server
+# processname: ssr-server
 # Author: Max Lv <max.c.lv@gmail.com>;
 # Run "/sbin/chkconfig --add shadowsocks" to add the Run levels.
 #====================================================================
@@ -24,7 +24,7 @@
 
 # Daemon
 NAME=shadowsocks-server
-DAEMON=/usr/bin/ss-server
+DAEMON=/usr/bin/ssr-server
 
 # Path to the configuration file.
 #

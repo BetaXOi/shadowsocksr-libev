@@ -1853,11 +1853,11 @@ main(int argc, char **argv)
     if(use_new_profile) {
         char port[6];
 
-        ss_server_new_1_t *servers = &conf->server_new_1;
+        ssr_server_new_1_t *servers = &conf->server_new_1;
         profile->server_num = servers->server_num;
         for(i = 0; i < servers->server_num; i++) {
             server_def_t *serv = &profile->servers[i];
-            ss_server_t *serv_cfg = &servers->servers[i];
+            ssr_server_t *serv_cfg = &servers->servers[i];
 
             struct sockaddr_storage *storage = ss_malloc(sizeof(struct sockaddr_storage));
 
@@ -2038,7 +2038,7 @@ main(int argc, char **argv)
 #else
 
 int
-start_ss_local_server(profile_t profile) {
+start_ssr_local_server(profile_t profile) {
     srand(time(NULL));
 
     char *remote_host = profile.remote_host;
@@ -2107,8 +2107,8 @@ start_ss_local_server(profile_t profile) {
     listen_ctx_t listen_ctx;
     listen_ctx.server_num = 1;
     server_def_t *serv = &listen_ctx.servers[0];
-    ss_server_t server_cfg;
-    ss_server_t *serv_cfg = &server_cfg;
+    ssr_server_t server_cfg;
+    ssr_server_t *serv_cfg = &server_cfg;
     server_cfg.protocol = 0;
     server_cfg.protocol_param = 0;
     server_cfg.obfs = 0;

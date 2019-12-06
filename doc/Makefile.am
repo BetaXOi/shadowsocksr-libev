@@ -14,12 +14,12 @@ VERSION = `$(SED) -n 's/.*PACKAGE_VERSION "\(.*\)"/\1/p'\
 # Guard against environment variables
 if ENABLE_DOCUMENTATION
   MAN1_DOC =
-  MAN1_DOC += ss-local.1
-  MAN1_DOC += ss-manager.1
-  MAN1_DOC += ss-nat.1
-  MAN1_DOC += ss-redir.1
-  MAN1_DOC += ss-server.1
-  MAN1_DOC += ss-tunnel.1
+  MAN1_DOC += ssr-local.1
+  MAN1_DOC += ssr-manager.1
+  MAN1_DOC += ssr-nat.1
+  MAN1_DOC += ssr-redir.1
+  MAN1_DOC += ssr-server.1
+  MAN1_DOC += ssr-tunnel.1
 
   MAN8_DOC =
   MAN8_DOC += shadowsocks-libev.8

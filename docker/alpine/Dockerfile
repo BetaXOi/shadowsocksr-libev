@@ -48,7 +48,7 @@ USER nobody
 
 EXPOSE $SERVER_PORT/tcp $SERVER_PORT/udp
 
-CMD ss-server -s $SERVER_ADDR \
+CMD ssr-server -s $SERVER_ADDR \
               -p $SERVER_PORT \
               -k ${PASSWORD:-$(hostname)} \
               -m $METHOD \

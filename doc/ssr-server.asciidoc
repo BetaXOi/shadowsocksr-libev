@@ -1,19 +1,21 @@
-ss-tunnel(1)
+ssr-server(1)
 ============
 
 NAME
 ----
-ss-tunnel - shadowsocks tools for local port forwarding, libev port
+ssr-server - shadowsocks server, libev port
 
 SYNOPSIS
 --------
-*ss-tunnel*
- [-AuUv6] [-h|--help]
+*ssr-server*
+ [-AuUv] [-h|--help]
  [-s <server_host>] [-p <server_port>] [-l <local_port>]
  [-k <password>] [-m <encrypt_method>] [-f <pid_file>]
  [-t <timeout>] [-c <config_file>] [-i <interface>]
- [-b <local_addr>] [-a <user_name>] [-n <nofile>]
- [-L addr:port] [--mtu <MTU>]
+ [-a <user_name>] [-d <addr>] [-n <nofile>]
+ [-b <local_address] [--fast-open] [--mptcp]
+ [--firewall] [--acl <acl_config>] [--mtu <MTU>]
+ [--manager-address <path_to_unix_domain>]
 
 DESCRIPTION
 -----------
@@ -23,8 +25,7 @@ It is a port of the original shadowsocks created by clowwindy.
 achieve both high performance and low resource consumption.
 
 *Shadowsocks-libev* consists of five components.
-`ss-tunnel`(1) is a tool for local port forwarding.
-See 'OPTIONS' section for special option needed by `ss-tunnel`(1).
+`ssr-server`(1) runs on a remote server to provide secured tunnel service.
 For more information, check out `shadowsocks-libev`(8).
 
 OPTIONS
@@ -34,9 +35,6 @@ Set the server's hostname or IP.
 
 -p <server_port>::
 Set the server's port number.
-
--l <local_port>::
-Set the local port number.
 
 -k <password>::
 Set the password. The server and the client should use the same password.
@@ -80,7 +78,7 @@ Send traffic through specific network interface.
 +
 For example, there are three interfaces in your device,
 which is lo (127.0.0.1), eth0 (192.168.0.1) and eth1 (192.168.0.2).
-Meanwhile, you configure `ss-tunnel` to listen on 0.0.0.0:8388 and bind to eth1.
+Meanwhile, you configure `ssr-server` to listen on 0.0.0.0:8388 and bind to eth1.
 That results the traffic go out through eth1, but not lo nor eth0.
 This option is useful to control traffic in multi-interface environment.
 
@@ -99,10 +97,30 @@ Enable onetime authentication.
 -6::
 Resovle hostname to IPv6 address first.
 
--L <addr:port>::
-Specify destination server address and port for local port forwarding.
+-d <addr>::
+Setup name servers for internal DNS resolver (libudns).
+The default server is fetched from '/etc/resolv.conf'.
+
+--fast-open::
+Enable TCP fast open.
 +
-Only used and available in tunnel mode.
+Only available with Linux kernel > 3.7.0.
+
+--mptcp::
+Enable Multipath TCP.
++
+Only available with MPTCP enabled Linux kernel.
+
+--firewall::
+Setup firewall rules for auto blocking.
+
+--acl <acl_config>::
+Enable ACL (Access Control List) and specify config file.
+
+--manager-address <path_to_unix_domain>::
+Specify UNIX domain socket address for the communication between ssr-manager(1) and ssr-server(1).
++
+Only available in server and manager mode.
 
 --mtu <MTU>::
 Specify the MTU of your network interface.
@@ -118,12 +136,37 @@ Enable verbose mode.
 -h|--help::
 Print help message.
 
+EXAMPLE
+-------
+It is recommended to use a config file when starting `ssr-server`(1).
+
+The config file is written in JSON and is easy to edit.
+Check out the 'SEE ALSO' section for the default path of config file.
+
+....
+# Start the ssr-server
+ssr-server -c /etc/shadowsocks-libev/config.json
+....
+
+INCOMPATIBILITY
+---------------
+The config file of `shadowsocks-libev`(8) is slightly different from original
+shadowsocks.
+In order to listen to both IPv4/IPv6 address, use the following grammar in
+your config json file:
+....
+{
+"server":["::0","0.0.0.0"],
+...
+}
+....
+
 SEE ALSO
 --------
-`ss-local`(1),
-`ss-server`(1),
-`ss-redir`(1),
-`ss-manager`(1),
+`ssr-local`(1),
+`ssr-tunnel`(1),
+`ssr-redir`(1),
+`ssr-manager`(1),
 `shadowsocks-libev`(8),
 `iptables`(8),
 /etc/shadowsocks-libev/config.json

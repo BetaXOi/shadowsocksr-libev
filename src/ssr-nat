@@ -17,7 +17,7 @@ usage() {
     Copyright (C) 2015 OpenWrt-dist
     Copyright (C) 2015 Jian Chang <aa65535@live.com>
 
-    Usage: ss-nat [options]
+    Usage: ssr-nat [options]
 
     Valid options are:
 
@@ -47,7 +47,7 @@ EOF
 
 loger() {
 	# 1.alert 2.crit 3.err 4.warn 5.notice 6.info 7.debug
-	logger -st ss-rules[$$] -p$1 $2
+	logger -st ssr-rules[$$] -p$1 $2
 }
 
 flush_r() {

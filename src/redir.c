@@ -1338,11 +1338,11 @@ main(int argc, char **argv)
     if(use_new_profile) {
         char port[6];
 
-        ss_server_new_1_t *servers = &conf->server_new_1;
+        ssr_server_new_1_t *servers = &conf->server_new_1;
         profile->server_num = servers->server_num;
         for(i = 0; i < servers->server_num; i++){
             server_def_t *serv = &profile->servers[i];
-            ss_server_t *serv_cfg = &servers->servers[i];
+            ssr_server_t *serv_cfg = &servers->servers[i];
 
             struct sockaddr_storage *storage = ss_malloc(sizeof(struct sockaddr_storage));
 

@@ -286,7 +286,7 @@ brew install shadowsocks-libev
 ### Windows
 
 For Windows, use either MinGW (msys) or Cygwin to build.
-At the moment, only `ss-local` is supported to build against MinGW (msys).
+At the moment, only `ssr-local` is supported to build against MinGW (msys).
 
 If you are using MinGW (msys), please download OpenSSL or PolarSSL source tarball
 to the home directory of msys, and build it like this (may take a few minutes):
@@ -386,14 +386,14 @@ man pages of the applications, respectively.
        [--manager-address <addr>] UNIX domain socket address
                                   only available in server and manager mode
 
-       [--executable <path>]      path to the executable of ss-server
+       [--executable <path>]      path to the executable of ssr-server
                                   only available in manager mode
 
        [-v]                       verbose mode
 
 notes:
 
-    ss-redir provides a transparent proxy function and only works on the
+    ssr-redir provides a transparent proxy function and only works on the
     Linux platform with iptables.
 
 ```
@@ -437,7 +437,7 @@ The latest shadowsocks-libev has provided a *redir* mode. You can configure your
     root@Wrt:~# iptables -t mangle -A OUTPUT -j SHADOWSOCKS_MARK
 
     # Start the shadowsocks-redir
-    root@Wrt:~# ss-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid
+    root@Wrt:~# ssr-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid
 
 ## Shadowsocks over KCP
 
@@ -449,15 +449,15 @@ The goal of shadowsocks over KCP is to provide a fully configurable, UDP based p
 
 ```bash
 server_linux_amd64 -l :21 -t 127.0.0.1:443 --crypt none --mtu 1200 --nocomp --mode normal --dscp 46 &
-ss-server -s 0.0.0.0 -p 443 -k passwd -m chacha20 -u
+ssr-server -s 0.0.0.0 -p 443 -k passwd -m chacha20 -u
 ```
 
 ### Setup your client
 
 ```bash
 client_linux_amd64 -l 127.0.0.1:1090 -r <server_ip>:21 --crypt none --mtu 1200 --nocomp --mode normal --dscp 46 &
-ss-local -s 127.0.0.1 -p 1090 -k passwd -m chacha20 -l 1080 -b 0.0.0.0 &
-ss-local -s <server_ip> -p 443 -k passwd -m chacha20 -l 1080 -U -b 0.0.0.0
+ssr-local -s 127.0.0.1 -p 1090 -k passwd -m chacha20 -l 1080 -b 0.0.0.0 &
+ssr-local -s <server_ip> -p 443 -k passwd -m chacha20 -l 1080 -U -b 0.0.0.0
 ```
 
 ## Security Tips

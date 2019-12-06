@@ -1,4 +1,4 @@
-_ss_local()
+_ssr_local()
 {
     local cur prev opts ciphers
     opts='-s -b -p -k -f -t -m -c -a -n -u -U -v -h -A --fast-open --mtu --help --mptcp -i --acl -l'
@@ -30,4 +30,4 @@ _ss_local()
     return 0
 }
 
-complete -F _ss_local ss-local
+complete -F _ssr_local ssr-local

@@ -3,7 +3,7 @@
 IMAGE_NAME="leesah/shadowsocks-libev"
 PORTNUMBER="8338"
 
-SHADOWSOCKS="/usr/local/bin/ss-server"
+SHADOWSOCKS="/usr/local/bin/ssr-server"
 HOST="-s 0.0.0.0"
 PORT="-p $PORTNUMBER"
 JSON=""
@@ -41,7 +41,7 @@ function print_usage_configfile {
 }
 
 function print_usage_host {
-  echo "To specify the host on which ss-server should listen, please use"
+  echo "To specify the host on which ssr-server should listen, please use"
   echo "  docker run -p $1::$PORTNUMBER ..."
   echo "or"
   echo "  docker run -p $1:<HOST-PORT>:$PORTNUMBER ..."
@@ -52,7 +52,7 @@ function print_usage_host {
 }
 
 function print_usage_port {
-  echo "To specify the port on which ss-server should listen, please use"
+  echo "To specify the port on which ssr-server should listen, please use"
   echo "  docker run -p $1:$PORTNUMBER ..."
   echo
 }

@@ -14,7 +14,7 @@ config.status
 libtool
 pid
 src/ss-*
-!src/ss-nat
+!src/ssr-nat
 stamp-h1
 .libs
 .pc

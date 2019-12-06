@@ -138,26 +138,26 @@ if (WIN32)
     list ( APPEND SOURCE_FILES_SERVER win32.c )
 endif ()
 
-add_executable(ss_local ${SOURCE_FILES_LOCAL})
-#add_executable(ss_tunnel ${SOURCE_FILES_TUNNEL})
-#add_executable(ss_server ${SOURCE_FILES_SERVER})
-#add_executable(ss_manager ${SOURCE_FILES_MANAGER})
-add_executable(ss_redir ${SOURCE_FILES_REDIR})
+add_executable(ssr_local ${SOURCE_FILES_LOCAL})
+#add_executable(ssr_tunnel ${SOURCE_FILES_TUNNEL})
+#add_executable(ssr_server ${SOURCE_FILES_SERVER})
+#add_executable(ssr_manager ${SOURCE_FILES_MANAGER})
+add_executable(ssr_redir ${SOURCE_FILES_REDIR})
 add_library(libshadowsocks-libev ${SOURCE_FILES_LOCAL})
 
-set_target_properties(ss_local PROPERTIES
+set_target_properties(ssr_local PROPERTIES
         COMPILE_DEFINITIONS MODULE_LOCAL
         )
-#set_target_properties(ss_tunnel PROPERTIES
+#set_target_properties(ssr_tunnel PROPERTIES
 #        COMPILE_DEFINITIONS MODULE_TUNNEL
 #        )
-#set_target_properties(ss_server PROPERTIES
+#set_target_properties(ssr_server PROPERTIES
 #        COMPILE_DEFINITIONS MODULE_REMOTE
 #        )
-#set_target_properties(ss_manager PROPERTIES
+#set_target_properties(ssr_manager PROPERTIES
 #        COMPILE_DEFINITIONS MODULE_MANAGER
 #        )
-set_target_properties(ss_redir PROPERTIES
+set_target_properties(ssr_redir PROPERTIES
         COMPILE_DEFINITIONS MODULE_REDIR
         )
 target_compile_definitions(libshadowsocks-libev
@@ -183,18 +183,18 @@ if (WIN32)
     list ( APPEND ss_lib_net Ws2_32 )
 endif()
 
-target_link_libraries(ss_local
+target_link_libraries(ssr_local
         ${ss_lib_net}
 )
-#target_link_libraries(ss_tunnel
+#target_link_libraries(ssr_tunnel
 #        ${ss_lib_net}
 #        )
-#target_link_libraries(ss_server
+#target_link_libraries(ssr_server
 #        ${ss_lib_net}
 #        )
-#target_link_libraries(ss_manager
+#target_link_libraries(ssr_manager
 #        ${ss_lib_common}
 #        )
-target_link_libraries(ss_redir
+target_link_libraries(ssr_redir
         ${ss_lib_net}
         )

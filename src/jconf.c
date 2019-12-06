@@ -104,7 +104,7 @@ parse_addr(const char *str, ss_addr_t *addr)
     }
 }
 
-void parse_ss_server(ss_server_t *server, json_value* json) {
+void parse_ssr_server(ssr_server_t *server, json_value* json) {
     unsigned int i;
 
     // TODO: set default value
@@ -279,7 +279,7 @@ read_jconf(const char *file)
                             json_value *v = value->u.array.values[j];
 
                             if(v->type == json_object) {
-                                parse_ss_server(&conf.server_new_1.servers[conf.server_new_1.server_num], v);
+                                parse_ssr_server(&conf.server_new_1.servers[conf.server_new_1.server_num], v);
                                 conf.server_new_1.server_num++;
                             }
                         }
@@ -350,7 +350,7 @@ void free_jconf(jconf_t *conf) {
     ss_free(conf->tunnel_address);
 
     if(conf->conf_ver == CONF_VER_LEGACY){
-        ss_server_legacy_t *legacy = &conf->server_legacy;
+        ssr_server_legacy_t *legacy = &conf->server_legacy;
         for(i = 0; i < legacy->remote_num; i++){
             free_addr(&legacy->remote_addr[i]);
         }
@@ -368,9 +368,9 @@ void free_jconf(jconf_t *conf) {
         ss_free(legacy->obfs);
         ss_free(legacy->obfs_param);
     } else {
-        ss_server_new_1_t *ss_server_new_1 = &conf->server_new_1;
-        for(i = 0; i < ss_server_new_1->server_num; i++){
-            ss_server_t *serv = &ss_server_new_1->servers[i];
+        ssr_server_new_1_t *ssr_server_new_1 = &conf->server_new_1;
+        for(i = 0; i < ssr_server_new_1->server_num; i++){
+            ssr_server_t *serv = &ssr_server_new_1->servers[i];
 
             ss_free(serv->server);
             ss_free(serv->password);

@@ -73,7 +73,7 @@
 #endif
 
 int verbose          = 0;
-char *executable     = "ss-server";
+char *executable     = "ssr-server";
 char *working_dir    = NULL;
 int working_dir_size = 0;
 

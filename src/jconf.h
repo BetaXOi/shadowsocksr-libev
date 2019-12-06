@@ -63,7 +63,7 @@ typedef struct {
     char *group;
     int enable;
     int udp_over_tcp;
-} ss_server_t;
+} ssr_server_t;
 
 typedef struct {
     int remote_num;
@@ -79,12 +79,12 @@ typedef struct {
     char *method;
     char *obfs; // SSR
     char *obfs_param; // SSR
-} ss_server_legacy_t;
+} ssr_server_legacy_t;
 
 typedef struct {
     size_t server_num;
-    ss_server_t servers[MAX_SERVER_NUM];
-} ss_server_new_1_t;
+    ssr_server_t servers[MAX_SERVER_NUM];
+} ssr_server_new_1_t;
 
 #define CONF_VER_LEGACY 0
 #define CONF_VER_1 1
@@ -92,8 +92,8 @@ typedef struct {
 typedef struct {
     int conf_ver; // 0 for legacy, > 0 for server_new_X
     union {
-        ss_server_legacy_t server_legacy;
-        ss_server_new_1_t server_new_1;
+        ssr_server_legacy_t server_legacy;
+        ssr_server_new_1_t server_new_1;
     };
     char *timeout;
     char *user;

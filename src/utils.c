@@ -262,15 +262,15 @@ usage()
         "  maintained by Max Lv <max.c.lv@gmail.com> and Linus Yang <laokongzi@gmail.com>\n\n");
     printf("  usage:\n\n");
 #ifdef MODULE_LOCAL
-    printf("    ss-local\n");
+    printf("    ssr-local\n");
 #elif MODULE_REMOTE
-    printf("    ss-server\n");
+    printf("    ssr-server\n");
 #elif MODULE_TUNNEL
-    printf("    ss-tunnel\n");
+    printf("    ssr-tunnel\n");
 #elif MODULE_REDIR
-    printf("    ss-redir\n");
+    printf("    ssr-redir\n");
 #elif MODULE_MANAGER
-    printf("    ss-manager\n");
+    printf("    ssr-manager\n");
 #endif
     printf("\n");
     printf(
@@ -354,7 +354,7 @@ usage()
 #endif
 #ifdef MODULE_MANAGER
     printf(
-        "       [--executable <path>]      Path to the executable of ss-server.\n");
+        "       [--executable <path>]      Path to the executable of ssr-server.\n");
 #endif
     printf(
         "       [--mtu <MTU>]              MTU of your network interface.\n");

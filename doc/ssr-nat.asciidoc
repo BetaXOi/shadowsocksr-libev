@@ -1,13 +1,13 @@
-ss-nat(1)
+ssr-nat(1)
 =========
 
 NAME
 ----
-ss-nat - helper script to setup NAT rules for transparent proxy
+ssr-nat - helper script to setup NAT rules for transparent proxy
 
 SYNOPSIS
 --------
-*ss-nat*
+*ssr-nat*
  [-ouUfh]
  [-s <server_ip>] [-S <server_ip>] [-l <local_port>]
  [-L <local_port>] [-i <ip_list_file>] [-a <lan_ips>]
@@ -20,7 +20,7 @@ It is a port of the original shadowsocks created by clowwindy.
 *Shadowsocks-libev* is written in pure C and takes advantage of libev to
 achieve both high performance and low resource consumption.
 
-`ss-nat`(1) sets up NAT rules for `ss-redir`(1) to provide traffic redirection.
+`ssr-nat`(1) sets up NAT rules for `ssr-redir`(1) to provide traffic redirection.
 It requires netfilter's NAT module and `iptables`(8).
 For more information, check out `shadowsocks-libev`(8) and the following
 'EXAMPLE' section.
@@ -71,24 +71,24 @@ Show this help message and exit
 
 EXAMPLE
 -------
-`ss-nat` requires `iptables`(8). Here is an example:
+`ssr-nat` requires `iptables`(8). Here is an example:
 
 ....
 # Enable NAT rules for shadowsocks,
 # with both TCP and UDP redirection enabled,
 # and applied for both PREROUTING and OUTPUT chains
-root@Wrt:~# ss-nat -s 192.168.1.100 -l 1080 -u -o
+root@Wrt:~# ssr-nat -s 192.168.1.100 -l 1080 -u -o
 
 # Disable and flush all NAT rules for shadowsocks
-root@Wrt:~# ss-nat -f
+root@Wrt:~# ssr-nat -f
 ....
 
 SEE ALSO
 --------
-`ss-local`(1),
-`ss-server`(1),
-`ss-tunnel`(1),
-`ss-manager`(1),
+`ssr-local`(1),
+`ssr-server`(1),
+`ssr-tunnel`(1),
+`ssr-manager`(1),
 `shadowsocks-libev`(8),
 `iptables`(8),
 /etc/shadowsocks-libev/config.json

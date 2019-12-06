@@ -1,4 +1,4 @@
-_ss_manager()
+_ssr_manager()
 {
     local cur prev opts ciphers
     opts='-s -b -p -k -f -t -m -c -a -n -u -U -v -h -A --mtu --help --mptcp -i -l --manager-address --executable'
@@ -38,4 +38,4 @@ _ss_manager()
     return 0
 }
 
-complete -F _ss_manager ss-manager
+complete -F _ssr_manager ssr-manager

@@ -1,4 +1,4 @@
-_ss_server()
+_ssr_server()
 {
     local cur prev opts ciphers
     opts='-s -b -p -k -f -t -m -c -a -n -u -U -v -h -A --fast-open --mtu --help --mptcp -i -6 -d --manager-address --firewall --acl'
@@ -34,4 +34,4 @@ _ss_server()
     esac
 }
 
-complete -F _ss_server ss-server
+complete -F _ssr_server ssr-server

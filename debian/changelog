@@ -25,14 +25,14 @@ shadowsocks-libev (2.5.3-1) unstable; urgency=medium
 
 shadowsocks-libev (2.5.2-1) unstable; urgency=medium
 
-  * Fix a bug of UDP relay mode of ss-local.
+  * Fix a bug of UDP relay mode of ssr-local.
 
  -- Max Lv <max.c.lv@gmail.com>  Mon, 12 Sep 2016 12:54:33 +0800
 
 shadowsocks-libev (2.5.1-1) unstable; urgency=medium
 
   * Refine ACL feature with hostname support.
-  * Add HTTP/SNI parser for ss-local/ss-redir.
+  * Add HTTP/SNI parser for ssr-local/ssr-redir.
 
  -- Max Lv <max.c.lv@gmail.com>  Sat, 10 Sep 2016 17:06:49 +0800
 
@@ -54,7 +54,7 @@ shadowsocks-libev (2.4.8-1) unstable; urgency=low
 
 shadowsocks-libev (2.4.7-1) unstable; urgency=low
 
-  * Add ss-nat, a helper script to set up NAT rules for ss-redir.
+  * Add ssr-nat, a helper script to set up NAT rules for ssr-redir.
   * Fix several issues for debian package.
 
  -- Max Lv <max.c.lv@gmail.com>  Wed, 1 Jun 2016 18:21:45 +0800
@@ -236,7 +236,7 @@ shadowsocks-libev (1.6.4-1) unstable; urgency=low
 
 shadowsocks-libev (1.6.3-1) unstable; urgency=low
 
-  * Refine ss-redir.
+  * Refine ssr-redir.
 
  -- Max Lv <max.c.lv@gmail.com>  Sun, 04 Jan 2015 19:23:52 +0900
 

@@ -303,8 +303,8 @@ RM = @RM@
 @ENABLE_DOCUMENTATION_FALSE@MAN1_DOC = 
 
 # Guard against environment variables
-@ENABLE_DOCUMENTATION_TRUE@MAN1_DOC = ss-local.1 ss-manager.1 ss-nat.1 \
-@ENABLE_DOCUMENTATION_TRUE@	ss-redir.1 ss-server.1 ss-tunnel.1
+@ENABLE_DOCUMENTATION_TRUE@MAN1_DOC = ssr-local.1 ssr-manager.1 ssr-nat.1 \
+@ENABLE_DOCUMENTATION_TRUE@	ssr-redir.1 ssr-server.1 ssr-tunnel.1
 @ENABLE_DOCUMENTATION_FALSE@MAN8_DOC = 
 @ENABLE_DOCUMENTATION_TRUE@MAN8_DOC = shadowsocks-libev.8
 MAN8_XML = $(MAN8_DOC:%.8=%.xml)

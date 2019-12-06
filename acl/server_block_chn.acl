@@ -1,9 +1,9 @@
-# All IPs listed here will be blocked while the ss-server try to outbound.
+# All IPs listed here will be blocked while the ssr-server try to outbound.
 # Only IP is allowed, *NOT* domain name.
 #
-# The IPs bellow are all IPs in CHN. It'll block ss-server to access all
+# The IPs bellow are all IPs in CHN. It'll block ssr-server to access all
 # CHN hosts by command
-# `ss-server -s:: -p 8388 -k 123456 --acl acl/server_block_chn.acl`
+# `ssr-server -s:: -p 8388 -k 123456 --acl acl/server_block_chn.acl`
 
 [outbound_block_list]
 103.235.44.0/22

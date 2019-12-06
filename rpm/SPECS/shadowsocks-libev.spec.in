@@ -117,12 +117,12 @@ fi
 
 %files
 /usr/share/doc/shadowsocks-libev/shadowsocks-libev.html
-/usr/share/doc/shadowsocks-libev/ss-local.html
-/usr/share/doc/shadowsocks-libev/ss-manager.html
-/usr/share/doc/shadowsocks-libev/ss-nat.html
-/usr/share/doc/shadowsocks-libev/ss-redir.html
-/usr/share/doc/shadowsocks-libev/ss-server.html
-/usr/share/doc/shadowsocks-libev/ss-tunnel.html
+/usr/share/doc/shadowsocks-libev/ssr-local.html
+/usr/share/doc/shadowsocks-libev/ssr-manager.html
+/usr/share/doc/shadowsocks-libev/ssr-nat.html
+/usr/share/doc/shadowsocks-libev/ssr-redir.html
+/usr/share/doc/shadowsocks-libev/ssr-server.html
+/usr/share/doc/shadowsocks-libev/ssr-tunnel.html
 %{_bindir}/*
 %{_libdir}/*.so.*
 %config(noreplace) %{_sysconfdir}/shadowsocks-libev/config.json
